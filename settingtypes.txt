@@ -1,0 +1,54 @@
+# Max light level where spawn can occur
+# Livello massimo di luce dove puo' comparire
+mobs_balrog_max_light (Max Light) int 14
+
+# Min light level where spawn can occur
+# Livello minimo di luce dove puo' comparire
+mobs_balrog_min_light (Max Light) int 0
+
+# Spawn interval, in seconds
+# Intervallo di comparsa, in secondi
+mobs_balrog_interval (Interval) int 60
+
+# Spawn chance, higher is less likely
+# Probabilita' di comparsa, maggiore e' e meno e' probabile
+mobs_balrog_chance (Chance) int 500000
+
+# Max number of spawned barlogs
+# Numero massimo di balrog generati
+mobs_balrog_aoc (Active Object Count) int 1
+
+# Min height where spawn can occur
+# Altezza minima dove puo' comparire
+mobs_balrog_min_height (Min Height) int -30912
+
+# Max height where spawn can occur
+# Altezza massima dove puo' comparire
+mobs_balrog_max_height (Max Height) int -1800
+
+# Min hit points
+# Punti salute minimi
+mobs_balrog_min_hp (Min HP) int 200
+
+# Max hit points
+# Punti salute massimi
+mobs_balrog_max_hp (Max HP) int 600
+
+# Walk chance; 0: stand still, 100: always walk
+# Possibilità di movimento; 0: sta fermo, 100 cammina sempre
+mobs_balrog_walk_chance (Walk Chance) int 50
+
+# View range, stated in nodes
+# Raggio visivo, espresso in nodi
+mobs_balrog_view_range (View Range) int 32
+
+# Damage dealt; 2: 1 heart, 4: 2 hearts, etc.
+# Ferimento inflitto; 2: 1 cuore, 4: 2 cuori, etc.
+mobs_balrog_damage (Damage Dealt) int 20
+
+# Use path finding?
+# 0 = no, 1 = yes, 2 = yes and build/destroy
+#
+# Usare la ricerca intelligente dei bersagli?
+# 0 = no, 1 = sì, 2 = sì e costruire/distruggere
+mobs_balrog_pathfinding (Path Finding) int 1
