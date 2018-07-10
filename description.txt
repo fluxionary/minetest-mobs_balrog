@@ -1,2 +1,2 @@
-Adds a balrog mob.
+Adds a balrog.
 Aggiunge un balrog.

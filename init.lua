@@ -1,6 +1,6 @@
 --[[
 
-   Mobs Balrog - Adds a balrog mob.
+   Mobs Balrog - Adds a balrog.
 	Copyright (C) 2018  Hamlet
 
    Authors of source code:
@@ -44,15 +44,12 @@
 --
 
 local minetest_log_level = minetest.settings:get("debug_log_level")
-local mod_load_message = "[Mod] Mobs Balrog [v0.3.3] loaded."
+local mod_load_message = "[Mod] Mobs Balrog [v0.3.4] loaded."
 
 
 --
 -- Balrog's spawn settings
 --
-
-local SPAWN_ON = {"group:cracky"}
--- Rocks, cobbles, etc.
 
 local MAX_LIGHT = tonumber(minetest.setting_get("mobs_balrog_max_light"))
 if (MAX_LIGHT == nil) then
@@ -104,29 +101,10 @@ if (MAX_HP == nil) then
 	MAX_HP = 600
 end
 
-local ARMOR_STRENGHT = 100
--- Default = 100, lower values make it stronger
-
-local WALKING_SPEED = 3.5
--- Default = 4, Player's walking speed = 4
-
-local RUNNING_SPEED = 5.2
--- Default = 5.2
--- (Player's walking speed (4)) * 1.3
--- 1.3 = HBSprint's default multiplier
-
 local WALK_CHANCE = tonumber(minetest.setting_get("mobs_balrog_walk_chance"))
 if (WALK_CHANCE == nil) then
 	WALK_CHANCE = 50
 end
-
-local CAN_JUMP = true
-
-local JUMP_HEIGHT = 4
--- Default = 16, a map block.
-
-local STEP_HEIGHT = 2.2
--- Default = 2.2, twice a mob's default step height.
 
 local VIEW_RANGE = tonumber(minetest.setting_get("mobs_balrog_view_range"))
 if (VIEW_RANGE == nil) then
@@ -137,30 +115,6 @@ local DAMAGE = tonumber(minetest.setting_get("mobs_balrog_damage"))
 if (DAMAGE == nil) then
 	DAMAGE = 20
 end
-
-local KNOCK_BACK = false
-
-local FEAR_HEIGHT = 0
-
-local FALL_DAMAGE = 0
-
-local WATER_DAMAGE = 7
--- Default: 7, if it has 400hp it will die in 60secs.
-
-local LAVA_DAMAGE = 0
-
-local LIGHT_DAMAGE = 0
-
-local CAN_SUFFOCATE = false
-
-local CAN_SWIM_INTO_WATER = 0
-
-local HIT_RANGE = 5
--- Player's default = 4
-
-local ATTACK_ANIMALS = true
-
-local GROUP_ATTACK = true
 
 local PATH_FINDER = tonumber(minetest.setting_get("mobs_balrog_pathfinding"))
 if (PATH_FINDER == nil) then
@@ -177,25 +131,25 @@ mobs:register_mob("mobs_balrog:balrog", {
 	type = "monster",
 	hp_min = MIN_HP,
 	hp_max = MAX_HP,
-	armor = ARMOR_STRENGHT,
-	walk_velocity = WALKING_SPEED,
-	run_velocity = RUNNING_SPEED,
+	armor = 100,
+	walk_velocity = 3.5,
+	run_velocity = 5.2,
 	walk_chance = WALK_CHANCE,
-	jump = CAN_JUMP,
-	jump_height = JUMP_HEIGHT,
-	stepheight = STEP_HEIGHT,
+	jump_height = 16,
+	stepheight = 2.2,
 	view_range = VIEW_RANGE,
 	damage = DAMAGE,
-	fear_height = FEAR_HEIGHT,
-	fall_damage = FALL_DAMAGE,
-	water_damage = WATER_DAMAGE,
-	lava_damage = LAVA_DAMAGE,
-	light_damage = LIGHT_DAMAGE,
-	suffocation = CAN_SUFFOCATE,
-	floats = CAN_SWIM_INTO_WATER,
-	reach = HIT_RANGE,
-	attack_animals = ATTACK_ANIMALS,
-	group_attack = GROUP_ATTACK,
+	knock_back = false,
+	fear_height = 0,
+	fall_damage = 0,
+	water_damage = 7,
+	lava_damage = 0,
+	light_damage = 0,
+	suffocation = false,
+	floats = 0,
+	reach = 5,
+	attack_animals = true,
+	group_attack = true,
 	attack_type = "dogfight",
 	blood_amount = 0,
 	pathfinding = PATH_FINDER,
@@ -391,7 +345,7 @@ minetest.register_tool("mobs_balrog:balrog_whip", {
 
 
 mobs:spawn({name = "mobs_balrog:balrog",
-	nodes = SPAWN_ON,
+	nodes = {"group:cracky"},
 	max_light = MAX_LIGHT,
 	min_light = MIN_LIGHT,
 	interval = INTERVAL,
