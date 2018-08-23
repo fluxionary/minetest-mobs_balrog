@@ -1,7 +1,7 @@
 --[[
 
-   Mobs Balrog - Adds a balrog.
-	Copyright (C) 2018  Hamlet
+   Mobs Balrog - Adds balrogs.
+	Copyright © 2018 Hamlet <hamlatmesehub@riseup.net>
 
    Authors of source code:
    -----------------------
@@ -40,48 +40,40 @@
 
 
 --
--- General variables
---
-
-local minetest_log_level = minetest.settings:get("debug_log_level")
-local mod_load_message = "[Mod] Mobs Balrog [v0.3.4] loaded."
-
-
---
 -- Balrog's spawn settings
 --
 
-local MAX_LIGHT = tonumber(minetest.setting_get("mobs_balrog_max_light"))
+local MAX_LIGHT = tonumber(minetest.settings:get("mobs_balrog_max_light"))
 if (MAX_LIGHT == nil) then
 	MAX_LIGHT = 14
 end
 
-local MIN_LIGHT = tonumber(minetest.setting_get("mobs_balrog_min_light"))
+local MIN_LIGHT = tonumber(minetest.settings:get("mobs_balrog_min_light"))
 if (MIN_LIGHT == nil) then
 	MIN_LIGHT = 0
 end
 
-local INTERVAL = tonumber(minetest.setting_get("mobs_balrog_interval"))
+local INTERVAL = tonumber(minetest.settings:get("mobs_balrog_interval"))
 if (INTERVAL == nil) then
 	INTERVAL = 60
 end
 
-local CHANCE = tonumber(minetest.setting_get("mobs_balrog_chance"))
+local CHANCE = tonumber(minetest.settings:get("mobs_balrog_chance"))
 if (CHANCE == nil) then
 	CHANCE = 500000
 end
 
-local MAX_NUMBER = tonumber(minetest.setting_get("mobs_balrog_aoc"))
+local MAX_NUMBER = tonumber(minetest.settings:get("mobs_balrog_aoc"))
 if (MAX_NUMBER == nil) then
 	MAX_NUMBER = 1
 end
 
-local MIN_HEIGHT = tonumber(minetest.setting_get("mobs_balrog_min_height"))
+local MIN_HEIGHT = tonumber(minetest.settings:get("mobs_balrog_min_height"))
 if (MIN_HEIGHT == nil) then
 	MIN_HEIGHT = -30912
 end
 
-local MAX_HEIGHT = tonumber(minetest.setting_get("mobs_balrog_max_height"))
+local MAX_HEIGHT = tonumber(minetest.settings:get("mobs_balrog_max_height"))
 if (MAX_HEIGHT == nil) then
 	MAX_HEIGHT = -1800
 end
@@ -91,32 +83,32 @@ end
 -- Balrog's attributes
 --
 
-local MIN_HP = tonumber(minetest.setting_get("mobs_balrog_min_hp"))
+local MIN_HP = tonumber(minetest.settings:get("mobs_balrog_min_hp"))
 if (MIN_HP == nil) then
 	MIN_HP = 200
 end
 
-local MAX_HP = tonumber(minetest.setting_get("mobs_balrog_max_hp"))
+local MAX_HP = tonumber(minetest.settings:get("mobs_balrog_max_hp"))
 if (MAX_HP == nil) then
 	MAX_HP = 600
 end
 
-local WALK_CHANCE = tonumber(minetest.setting_get("mobs_balrog_walk_chance"))
+local WALK_CHANCE = tonumber(minetest.settings:get("mobs_balrog_walk_chance"))
 if (WALK_CHANCE == nil) then
 	WALK_CHANCE = 50
 end
 
-local VIEW_RANGE = tonumber(minetest.setting_get("mobs_balrog_view_range"))
+local VIEW_RANGE = tonumber(minetest.settings:get("mobs_balrog_view_range"))
 if (VIEW_RANGE == nil) then
 	VIEW_RANGE = 32
 end
 
-local DAMAGE = tonumber(minetest.setting_get("mobs_balrog_damage"))
+local DAMAGE = tonumber(minetest.settings:get("mobs_balrog_damage"))
 if (DAMAGE == nil) then
 	DAMAGE = 20
 end
 
-local PATH_FINDER = tonumber(minetest.setting_get("mobs_balrog_pathfinding"))
+local PATH_FINDER = tonumber(minetest.settings:get("mobs_balrog_pathfinding"))
 if (PATH_FINDER == nil) then
 	PATH_FINDER = 1
 end
@@ -369,8 +361,11 @@ mobs:alias_mob("mobs:balrog", "mobs_balrog:balrog")
 -- Minetest engine debug logging
 --
 
-if (minetest_log_level == nil) or (minetest_log_level == "action") or
-	(minetest_log_level == "info") or (minetest_log_level == "verbose") then
+if (minetest.settings:get("debug_log_level") == nil)
+or (minetest.settings:get("debug_log_level") == "action")
+or	(minetest.settings:get("debug_log_level") == "info")
+or (minetest.settings:get("debug_log_level") == "verbose")
+then
 
-	minetest.log("action", mod_load_message)
+	minetest.log("action", "[Mod] Mobs Balrog [v0.3.5] loaded.")
 end

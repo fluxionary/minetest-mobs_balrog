@@ -10,6 +10,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 	- No further addition planned.
 
 
+## [0.3.5] - 2018-08-23
+### Changed
+
+	- fixed deprecated lua api calls
+	- minor code improvements
+
+### Removed
+
+	- balrog_model.b3d (identical to mobs_balrog.b3d)
+
+
+
 ## [0.3.4] - 2018-07-10
 ### Added
 
