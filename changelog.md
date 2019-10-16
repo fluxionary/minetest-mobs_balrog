@@ -10,6 +10,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 	- No further addition planned.
 
 
+## [0.4.0] - 2019-10-16
+### Added
+
+	- Support for localization.
+
+### Changed
+
+	- mod.conf to follow MT v5.x specifics.
+	- Textures have been optimized (with optipng).
+
+### Removed
+
+	- Support for MT v4.x
+
+
+
 ## [0.3.5] - 2018-08-23
 ### Changed
 

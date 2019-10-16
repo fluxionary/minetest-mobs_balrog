@@ -2,10 +2,11 @@
 ![Mobs Balrog's screenshot](screenshot.png)  
 **_Adds balrogs._**
 
-**Source code's license:** LGPL v2.1  
-**Media (Textures, Models, Sounds) license:** CC-BY-SA 3.0 Unported
+**Version:** 0.4.0
+**Source code's license:** [LGPL v2.1][1]  
+**Media (Textures, Models, Sounds) license:** [CC-BY-SA 3.0 Unported][2]
 
-**Dependencies:** default, tnt (found in Minetest Game), mobs (Mobs Redo)  
+**Dependencies:** default, tnt (found in [Minetest Game][3]), mobs ([Mobs Redo][4])  
 
 
 ### Installation
@@ -21,3 +22,9 @@ GNU+Linux - If you use a system-wide installation place it in
 
 For further information or help see:  
 https://wiki.minetest.net/Help:Installing_Mods
+
+
+[1]: https://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html
+[2]: https://creativecommons.org/licenses/by-sa/3.0/
+[3]: https://github.com/minetest/minetest_game
+[4]: https://forum.minetest.net/viewtopic.php?t=9917

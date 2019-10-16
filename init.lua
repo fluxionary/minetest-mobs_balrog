@@ -1,7 +1,7 @@
 --[[
 
    Mobs Balrog - Adds balrogs.
-	Copyright © 2018 Hamlet <hamlatmesehub@riseup.net>
+	Copyright © 2018-2019 Hamlet <hamlatmesehub@riseup.net>
 
    Authors of source code:
    -----------------------
@@ -37,6 +37,11 @@
 
 
 ]]--
+
+
+-- Used for localization
+
+local S = minetest.get_translator("mobs_balrog")
 
 
 --
@@ -215,7 +220,7 @@ mobs:register_mob("mobs_balrog:balrog", {
 --
 
 minetest.register_tool("mobs_balrog:balrog_whip", {
-   description = minetest.colorize("orange", "Balrog Whip") ..
+   description = minetest.colorize("orange", S("Balrog Whip")) ..
       minetest.get_background_escape_sequence("darkred"),
    inventory_image = "mobs_balrog_balrog_whip.png^[transform3",
    on_use = function(itemstack, user, pointed_thing)
@@ -367,5 +372,5 @@ or	(minetest.settings:get("debug_log_level") == "info")
 or (minetest.settings:get("debug_log_level") == "verbose")
 then
 
-	minetest.log("action", "[Mod] Mobs Balrog [v0.3.5] loaded.")
+	minetest.log("action", "[Mod] Mobs Balrog [v0.4.0] loaded.")
 end
