@@ -203,7 +203,7 @@ mobs:register_mob("mobs_balrog:balrog", {
 
 			tnt.boom(pos, {
 				name = "Balrog's Blast",
-				radius = 16,
+				radius = 6,
 				damage_radius = 16,
 				disable_drops = true,
 				ignore_protection = false,
