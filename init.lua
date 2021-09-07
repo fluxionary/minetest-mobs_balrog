@@ -334,7 +334,7 @@ minetest.register_tool("mobs_balrog:balrog_whip", {
 		})
 	end,
 	on_blast = function(self, damage)
-		return false, false, {self.itemstring}
+		return false, false, {}
 	end,
 })
 
