@@ -182,7 +182,7 @@ mobs:register_mob("mobs_balrog:balrog", {
 	on_die = function(self, pos)
 		self.object:remove()
 
-		minetest.after(0.1, function()
+		minetest.after(0.0, function()
 			-- This has been taken from ../tnt/init.lua @243
 			minetest.add_particlespawner({
 				amount = 128,
@@ -332,6 +332,9 @@ minetest.register_tool("mobs_balrog:balrog_whip", {
 			texture = "fire_basic_flame.png",
 			collisiondetection = true,
 		})
+	end,
+	on_blast = function(self, damage)
+		return false, false, {self.itemstring}
 	end,
 })
 
