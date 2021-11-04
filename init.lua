@@ -200,7 +200,7 @@ mobs:register_mob("mobs_balrog:balrog", {
 				texture = "fire_basic_flame.png",
 				collisiondetection = true,
 			})
-
+         --[[
 			tnt.boom(pos, {
 				name = "Balrog's Blast",
 				radius = 6,
@@ -210,6 +210,7 @@ mobs:register_mob("mobs_balrog:balrog", {
 				ignore_on_blast = false,
 				tiles = {""},
 			})
+         ]]--
 		end)
 	end,
 })
