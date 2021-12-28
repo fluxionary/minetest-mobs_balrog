@@ -337,6 +337,7 @@ minetest.register_tool("mobs_balrog:balrog_whip", {
 	on_blast = function(self, damage)
 		return false, false, {}
 	end,
+        light_source = 14,
 })
 
 
