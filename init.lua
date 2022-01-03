@@ -236,7 +236,7 @@ minetest.register_tool("mobs_balrog:balrog_whip", {
             }
             if minetest.get_node(new_pos).name == "air"  and
             not minetest.is_protected(new_pos, user:get_player_name()) then
-               minetest.set_node(new_pos, {name = "fire:basic_flame"})
+               minetest.set_node(new_pos, {name = "yl_commons:temp_flame"})
             end
          end
          if not minetest.setting_getbool("creative_mode") then
