@@ -118,6 +118,11 @@ if (PATH_FINDER == nil) then
 	PATH_FINDER = 1
 end
 
+local LIFETIMER = tonumber(minetest.settings:get("mobs_balrog_lifetimer"))
+if (LIFETIMER == nil) then
+	LIFETIMER = 5 * 60 * 60
+end
+
 
 --
 -- Balrog entity
@@ -129,6 +134,7 @@ mobs:register_mob("mobs_balrog:balrog", {
 	hp_min = MIN_HP,
 	hp_max = MAX_HP,
 	armor = 100,
+	lifetimer = LIFETIMER,
 	walk_velocity = 3.5,
 	run_velocity = 5.2,
 	walk_chance = WALK_CHANCE,
