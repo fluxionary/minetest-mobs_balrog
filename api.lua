@@ -239,7 +239,7 @@ function mobs_balrog.api.whip_air(source, pos, dir, cause, starting_power)
         starting_power = 1
     end
     for i = 3, whip_fire_distance do
-        local new_pos = vector.round(pos + (dir * i))
+        local new_pos = vector.round(vector.add(pos, vector.multiply(dir,  i)))
         local hit_obj = false
         local lb = vector.subtract(new_pos, 1.5)
         local ub = vector.add(new_pos, 1.5)
@@ -249,8 +249,8 @@ function mobs_balrog.api.whip_air(source, pos, dir, cause, starting_power)
                 mobs_balrog.log("action", "%s's air whip hit %s", identify(source), identify(obj))
 
                 -- suck the victim towards the whip holder
-                local vel = dir * -30
-                vel.y = math.min(vel.y, 10) -- don't suck "up" too much
+                local vel = vector.multiply(dir, -30)  -- TODO make configurable
+                vel.y = math.min(vel.y, 10) -- don't suck "up" too much  -- TODO make configurable
                 obj:add_velocity(vel)
                 mobs_balrog.api.whip_object(source, obj, starting_power)
 
@@ -281,9 +281,9 @@ function mobs_balrog.api.whip_node(pos, cause)
         for z = -whip_fire_radius, whip_fire_radius do
             if (x * x + z * z) <= (whip_fire_radius * whip_fire_radius) then
                 for y = 10, -10, -1 do
-                    local new_pos = pos + vector.new(x, y, z)
+                    local new_pos = vector.add(pos, vector.new(x, y, z))
                     if not minetest.is_protected(new_pos, cause) then
-                        local posu = new_pos - vector.new(0, 1, 0)
+                        local posu = vector.subtract(new_pos, vector.new(0, 1, 0))
 
                         local node_name = minetest.get_node(new_pos).name
                         local nodeu_name = minetest.get_node(posu).name
