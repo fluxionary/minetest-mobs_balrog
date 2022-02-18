@@ -70,7 +70,11 @@ dofile(modpath .. "/spawn.lua")
 dofile(modpath .. "/whip.lua")
 
 if mobs_balrog.settings.flame_node == "mobs_balrog:flame" then
-    dofile(modpath .. "/flame_node.lua")
+    if mobs_balrog.has.fire then
+        dofile(modpath .. "/flame_node.lua")
+    else
+        error("mobs_balrog needs either fire or yl_commons")
+    end
 end
 if mobs_balrog.has.armor then
     dofile(modpath .. "/compat/armor.lua")

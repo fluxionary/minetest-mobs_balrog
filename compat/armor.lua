@@ -20,6 +20,7 @@ add_fire_protection("3d_armor:chestplate_admin", 200)
 add_fire_protection("3d_armor:helmet_admin", 200)
 add_fire_protection("3d_armor:leggings_admin", 200)
 if has.shields then
+    -- errors out, because it has no armor groups defined :\
     --add_fire_protection("shields:shield_admin", 200)
 end
 
