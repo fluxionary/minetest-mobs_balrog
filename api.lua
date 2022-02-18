@@ -166,7 +166,9 @@ function mobs_balrog.whip_air(source, pos, dir, cause, starting_power)
                 mobs_balrog.log("action", "%s's air whip hit %s", identify(source), identify(obj))
 
                 -- suck the victim towards the whip holder
-                obj:add_velocity(dir * -30)
+                local vel = dir * -30
+                vel.y = math.min(vel.y, 10) -- don't suck "up" too much
+                obj:add_velocity(vel)
                 mobs_balrog.whip_object(source, obj, starting_power)
 
                 hit_obj = true
@@ -258,6 +260,7 @@ local function fire_hit(target, source, remaining_hits, starting_power)
     if not target or not source then
         return
     end
+
     local pos = target:get_pos()
     if not pos then
         -- target died or unloaded or something
@@ -271,8 +274,9 @@ local function fire_hit(target, source, remaining_hits, starting_power)
 
     add_particles(target)
     target:punch(source, starting_power, fire_tool_capabilities)
+
     local hp = target:get_hp()
-    if hp > 0 and remaining_hits > 1 then
+    if target:get_pos() and hp > 0 and remaining_hits > 1 then
         minetest.after(1, fire_hit, target, source, remaining_hits - 1)
     end
 end
