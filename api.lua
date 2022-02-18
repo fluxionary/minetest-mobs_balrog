@@ -7,6 +7,7 @@ local whip_fire_distance = mobs_balrog.settings.whip_fire_distance
 local flame_node = mobs_balrog.settings.flame_node
 local fire_damage = mobs_balrog.settings.fire_damage
 local min_power = 1 / (fire_damage - 1)
+local has = mobs_balrog.has
 
 local function identify(object)
     if not object then
@@ -53,13 +54,66 @@ function mobs_balrog.custom_attack(self, _, target_pos)
     end
 end
 
-function mobs_balrog.do_custom(self, dtime)
-    if self.state == "attack" and self.attack and math.random() < 0.05 then
+local sense_phrases = {
+    "Fee fie foe fum, I smell the blood of an adventurer...",
+    "I sense thee...",
+    "I thought I felt *something*",
+    "I sense thee, although thou hide...",
+    "Well now, who is this, who creeps along in the shadows?",
+}
+local reveal_phrases = {
+    "Become visible!",
+    "Be made visible!",
+    "Be seen, be dead!",
+    "Be seen!",
+    "You are exposed!",
+    "There they are, attack!",
+    "Show Yourself!",
+}
+
+function mobs_balrog.decloak(self, dtime)
+    self.player_invisibility_target = self.player_invisibility_target or ""
+    self.invisibility_sensor = (self.invisibility_sensor or 0) + dtime
+
+    if self.invisibility_sensor > 3 then
+        self.invisibility_sensor = 0
+        local o = self.object
+        if not o then
+            return
+        end
+        local p = o:get_pos()
+        if not p then
+            return
+        end
+
+        local objs = minetest.get_objects_inside_radius(p, 10)
+        for _, obj in pairs(objs) do
+            if obj and obj:is_player() then
+                local pname = obj:get_player_name()
+                local has_staff = minetest.check_player_privs(pname, {staff = true})
+                if invisibility[pname] and not (self.player_invisibility_target == pname) and not has_staff then
+                    local str = sense_phrases[math.random(1, #sense_phrases)]
+                    minetest.chat_send_player(pname, str)
+                    self.player_invisibility_target = pname
+                elseif invisibility[pname] and self.player_invisibility_target == pname then
+                    local str = reveal_phrases[math.random(1, #reveal_phrases)]
+                    minetest.chat_send_player(pname, str)
+                    invisibility[pname] = nil
+                end
+            end
+        end
+    end
+end
+
+function mobs_balrog.whip_attack(self, dtime)
+    self.time_since_whip = (self.time_since_whip or 0) + dtime
+
+    if self.state == "attack" and self.attack and self.time_since_whip > 3 and math.random() < 0.5 then
         local own_pos = self.object:get_pos()
         local target_pos = self.attack:get_pos()
 
         if not own_pos or not target_pos then
-            return true
+            return
         end
 
         target_pos.y = target_pos.y + 0.5
@@ -72,15 +126,23 @@ function mobs_balrog.do_custom(self, dtime)
             self:set_animation("punch")
             self:mob_sound(self.sounds.attack)
 
+            self.time_since_whip = 0
+
             mobs_balrog.whip_air(
                 self.object,
                 own_pos,
                 vector.direction(own_pos, target_pos),
                 "mobs_balrog:balrog"
             )
-
-            return false
         end
+    end
+end
+
+function mobs_balrog.do_custom(self, dtime)
+    mobs_balrog.whip_attack(self, dtime)
+
+    if has.invisibility then
+        mobs_balrog.decloak(self, dtime)
     end
 
     return true
@@ -183,7 +245,7 @@ function mobs_balrog.whip_air(source, pos, dir, cause, starting_power)
         end
         local node = minetest.get_node(new_pos)
         local node_name = node.name
-        if node_name == "air"  then
+        if node_name == "air" then
             minetest.set_node(new_pos, {name = flame_node})
         elseif node_name == flame_node then
             -- do nothing, continue
@@ -207,9 +269,9 @@ function mobs_balrog.whip_node(pos, cause)
                         local nodeu_def = minetest.registered_nodes[nodeu_name] or {}
                         local is_solid_under = (
                             nodeu_def.drawtype ~= "airlike" and
-                            nodeu_def.drawtype ~= "plantlike" and
-                            nodeu_def.drawtype ~= "firelike" and
-                            nodeu_def.drawtype ~= "plantlike_rooted"
+                                nodeu_def.drawtype ~= "plantlike" and
+                                nodeu_def.drawtype ~= "firelike" and
+                                nodeu_def.drawtype ~= "plantlike_rooted"
                         )
 
                         if node_name == "air" and is_solid_under then
@@ -228,7 +290,7 @@ local function puts_out_fire(pos)
     local node_name = node.name
     return (
         minetest.get_item_group(node_name, "water") > 0 or
-        minetest.get_item_group(node_name, "cools_lava") > 0
+            minetest.get_item_group(node_name, "cools_lava") > 0
     )
 end
 

@@ -57,7 +57,9 @@ mobs_balrog = {
         rainbow_ore = minetest.get_modpath("rainbow_ore"),
 
         fire = minetest.get_modpath("fire"),
-        yl_commons = minetest.get_modpath("yl_commons")
+        yl_commons = minetest.get_modpath("yl_commons"),
+
+        invisibility = minetest.get_modpath("invisibility"),
     }
 }
 
