@@ -1,3 +1,5 @@
+local default_flame_node = mobs_balrog.has.fire and "mobs_balrog:flame" or "yl_commons:temp_flame"
+
 mobs_balrog.settings = {
     -- spawn params
     max_light = tonumber(minetest.settings:get("mobs_balrog.max_light")) or 14,
@@ -21,12 +23,12 @@ mobs_balrog.settings = {
     whip_drop_chance = tonumber(minetest.settings:get("mobs_balrog.whip_drop_chance")) or 100,
 
     -- whip
-    whip_power = 0.5,
-    whip_uses = 500,
-    whip_fire_distance = 50,
-    whip_fire_radius = 5,
-    whip_fire_time = 5,
-    flame_node = "mobs_balrog:flame",
+    whip_power = tonumber(minetest.settings:get("mobs_balrog.whip_power")) or 0.5,
+    whip_uses = tonumber(minetest.settings:get("mobs_balrog.whip_uses")) or 500,
+    whip_fire_distance = tonumber(minetest.settings:get("mobs_balrog.whip_fire_distance")) or 50,
+    whip_fire_radius = tonumber(minetest.settings:get("mobs_balrog.whip_fire_radius")) or 5,
+    whip_fire_time = tonumber(minetest.settings:get("mobs_balrog.whip_fire_time")) or 5,
+    flame_node = minetest.settings:get("mobs_balrog.flame_node") or default_flame_node,
 }
 
 mobs_balrog.settings.whip_tool_capabilities = {
