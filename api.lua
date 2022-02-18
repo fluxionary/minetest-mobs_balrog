@@ -9,6 +9,15 @@ local fire_damage = mobs_balrog.settings.fire_damage
 local min_power = 1 / (fire_damage - 1)
 local has = mobs_balrog.has
 
+mobs_balrog.api = {}
+
+--[[
+    identify(object)
+
+    *always* returns a string
+    tries to get a name for players, or the kind for other objects
+    -- TODO should this return the name for "named" objects?
+]]
 local function identify(object)
     if not object then
         return "nil"
@@ -26,7 +35,7 @@ local function identify(object)
     end
 end
 
-function mobs_balrog.custom_attack(self, _, target_pos)
+function mobs_balrog.api.custom_attack(self, _, target_pos)
     target_pos = table.copy(target_pos)
     local own_pos = self.object:get_pos()
 
@@ -46,7 +55,7 @@ function mobs_balrog.custom_attack(self, _, target_pos)
             self.attack = attached
         end
 
-        mobs_balrog.whip_object(self.object, self.attack)
+        mobs_balrog.api.whip_object(self.object, self.attack)
 
     else
         self.state = "walk"
@@ -54,6 +63,7 @@ function mobs_balrog.custom_attack(self, _, target_pos)
     end
 end
 
+-- TODO: configurable?
 local sense_phrases = {
     "Fee fie foe fum, I smell the blood of an adventurer...",
     "I sense thee...",
@@ -61,6 +71,8 @@ local sense_phrases = {
     "I sense thee, although thou hide...",
     "Well now, who is this, who creeps along in the shadows?",
 }
+
+-- TODO: configurable?
 local reveal_phrases = {
     "Become visible!",
     "Be made visible!",
@@ -71,31 +83,38 @@ local reveal_phrases = {
     "Show Yourself!",
 }
 
-function mobs_balrog.decloak(self, dtime)
+--[[
+    remove invisibility from invisible players.
+
+    -- TODO: make this part of an external API?
+]]
+function mobs_balrog.api.decloak(self, dtime)
     self.player_invisibility_target = self.player_invisibility_target or ""
     self.invisibility_sensor = (self.invisibility_sensor or 0) + dtime
 
     if self.invisibility_sensor > 3 then
         self.invisibility_sensor = 0
-        local o = self.object
-        if not o then
-            return
-        end
-        local p = o:get_pos()
+
+        local p = self.object and self.object:get_pos()
         if not p then
+            -- we don't actually exist, give up
             return
         end
 
-        local objs = minetest.get_objects_inside_radius(p, 10)
-        for _, obj in pairs(objs) do
-            if obj and obj:is_player() then
+        -- TODO: radius configurable
+        for _, obj in pairs(minetest.get_objects_inside_radius(p, 10)) do
+            if obj:is_player() then
                 local pname = obj:get_player_name()
-                local has_staff = minetest.check_player_privs(pname, {staff = true})
-                if invisibility[pname] and not (self.player_invisibility_target == pname) and not has_staff then
+                local is_staff = minetest.check_player_privs(pname, {staff = true})
+                local is_invisible = invisibility[pname]
+                local is_target = self.player_invisibility_target == pname
+
+                if is_invisible and not is_target and not is_staff then
                     local str = sense_phrases[math.random(1, #sense_phrases)]
                     minetest.chat_send_player(pname, str)
                     self.player_invisibility_target = pname
-                elseif invisibility[pname] and self.player_invisibility_target == pname then
+
+                elseif is_invisible and is_target then
                     local str = reveal_phrases[math.random(1, #reveal_phrases)]
                     minetest.chat_send_player(pname, str)
                     invisibility[pname] = nil
@@ -105,9 +124,10 @@ function mobs_balrog.decloak(self, dtime)
     end
 end
 
-function mobs_balrog.whip_attack(self, dtime)
+function mobs_balrog.api.whip_attack(self, dtime)
     self.time_since_whip = (self.time_since_whip or 0) + dtime
 
+    -- TODO: configurable time between whippings
     if self.state == "attack" and self.attack and self.time_since_whip > 3 and math.random() < 0.5 then
         local own_pos = self.object:get_pos()
         local target_pos = self.attack:get_pos()
@@ -128,7 +148,7 @@ function mobs_balrog.whip_attack(self, dtime)
 
             self.time_since_whip = 0
 
-            mobs_balrog.whip_air(
+            mobs_balrog.api.whip_air(
                 self.object,
                 own_pos,
                 vector.direction(own_pos, target_pos),
@@ -138,11 +158,11 @@ function mobs_balrog.whip_attack(self, dtime)
     end
 end
 
-function mobs_balrog.do_custom(self, dtime)
-    mobs_balrog.whip_attack(self, dtime)
+function mobs_balrog.api.do_custom(self, dtime)
+    mobs_balrog.api.whip_attack(self, dtime)
 
     if has.invisibility then
-        mobs_balrog.decloak(self, dtime)
+        mobs_balrog.api.decloak(self, dtime)
     end
 
     return true
@@ -158,10 +178,11 @@ local function explode(pos)
     })
     mobs_balrog.log("action", "explosion @ %s took %s us",
         minetest.pos_to_string(vector.round(pos)),
-        minetest.get_us_time() - before)
+        minetest.get_us_time() - before
+    )
 end
 
-function mobs_balrog.on_die(self, pos)
+function mobs_balrog.api.on_die(self, pos)
     self.object:remove()
 
     minetest.after(0.0, function()
@@ -213,7 +234,7 @@ local function is_valid_target(source, target)
     return true
 end
 
-function mobs_balrog.whip_air(source, pos, dir, cause, starting_power)
+function mobs_balrog.api.whip_air(source, pos, dir, cause, starting_power)
     if not starting_power then
         starting_power = 1
     end
@@ -231,7 +252,7 @@ function mobs_balrog.whip_air(source, pos, dir, cause, starting_power)
                 local vel = dir * -30
                 vel.y = math.min(vel.y, 10) -- don't suck "up" too much
                 obj:add_velocity(vel)
-                mobs_balrog.whip_object(source, obj, starting_power)
+                mobs_balrog.api.whip_object(source, obj, starting_power)
 
                 hit_obj = true
                 break
@@ -255,7 +276,7 @@ function mobs_balrog.whip_air(source, pos, dir, cause, starting_power)
     end
 end
 
-function mobs_balrog.whip_node(pos, cause)
+function mobs_balrog.api.whip_node(pos, cause)
     for x = -whip_fire_radius, whip_fire_radius do
         for z = -whip_fire_radius, whip_fire_radius do
             if (x * x + z * z) <= (whip_fire_radius * whip_fire_radius) then
@@ -269,9 +290,9 @@ function mobs_balrog.whip_node(pos, cause)
                         local nodeu_def = minetest.registered_nodes[nodeu_name] or {}
                         local is_solid_under = (
                             nodeu_def.drawtype ~= "airlike" and
-                                nodeu_def.drawtype ~= "plantlike" and
-                                nodeu_def.drawtype ~= "firelike" and
-                                nodeu_def.drawtype ~= "plantlike_rooted"
+                            nodeu_def.drawtype ~= "plantlike" and
+                            nodeu_def.drawtype ~= "firelike" and
+                            nodeu_def.drawtype ~= "plantlike_rooted"
                         )
 
                         if node_name == "air" and is_solid_under then
@@ -290,7 +311,7 @@ local function puts_out_fire(pos)
     local node_name = node.name
     return (
         minetest.get_item_group(node_name, "water") > 0 or
-            minetest.get_item_group(node_name, "cools_lava") > 0
+        minetest.get_item_group(node_name, "cools_lava") > 0
     )
 end
 
@@ -316,11 +337,11 @@ local function add_particles(target)
 end
 
 local function fire_hit(target, source, remaining_hits, starting_power)
+    if not (target and source) then
+        return
+    end
     if not starting_power then
         starting_power = 1
-    end
-    if not target or not source then
-        return
     end
 
     local pos = target:get_pos()
@@ -329,7 +350,8 @@ local function fire_hit(target, source, remaining_hits, starting_power)
         return
     end
 
-    if puts_out_fire(pos) or puts_out_fire(vector.subtract(pos, vector.new(0, 1, 0))) then
+    local pos_below = vector.subtract(pos, vector.new(0, 1, 0))
+    if puts_out_fire(pos) or puts_out_fire(pos_below) then
         -- in water or something
         return
     end
@@ -343,7 +365,7 @@ local function fire_hit(target, source, remaining_hits, starting_power)
     end
 end
 
-function mobs_balrog.whip_object(source, target, starting_power)
+function mobs_balrog.api.whip_object(source, target, starting_power)
     if not starting_power then
         starting_power = 1
     end
@@ -351,14 +373,20 @@ function mobs_balrog.whip_object(source, target, starting_power)
     if source.object then
         source = source.object
     end
+
     local spos = source:get_pos()
     local tpos = target.object and target.object:get_pos() or target:get_pos()
 
+    if not (spos and tpos) then
+        -- somebody doesn't exist, cancel the action
+        return
+    end
+
     local distance = vector.distance(spos, tpos)
-    local power = math.max(min_power, math.min((whip_fire_distance - (distance or 0)) / whip_fire_distance, 1))
+    local power = starting_power * math.max(min_power, math.min((whip_fire_distance - (distance or 0)) / whip_fire_distance, 1))
 
     add_particles(target)
-    target:punch(source, power * starting_power, whip_tool_capabilities)
+    target:punch(source, power, whip_tool_capabilities)
 
     local pos = target:get_pos()  -- returns nil if dead?
     local hp = target:get_hp()

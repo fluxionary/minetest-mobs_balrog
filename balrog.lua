@@ -68,9 +68,9 @@ mobs:register_mob("mobs_balrog:balrog", {
         punch_end = 380,
         punch_speed = 45,
     },
-    custom_attack = mobs_balrog.custom_attack,
-    on_die = mobs_balrog.on_die,
-    do_custom = mobs_balrog.do_custom,
+    custom_attack = mobs_balrog.api.custom_attack,
+    on_die = mobs_balrog.api.on_die,
+    do_custom = mobs_balrog.api.do_custom,
 })
 
 mobs:register_egg("mobs_balrog:balrog",
