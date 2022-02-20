@@ -13,6 +13,7 @@ mobs_balrog.settings = {
     -- attributes
     hp_min = tonumber(minetest.settings:get("mobs_balrog.hp_min")) or 200,
     hp_max = tonumber(minetest.settings:get("mobs_balrog.hp_max")) or 600,
+    jump_height = tonumber(minetest.settings:get("mobs_balrog.jump_height")) or 10,  -- was 16
     walk_chance = tonumber(minetest.settings:get("mobs_balrog.walk_chance")) or 50,
     view_range = tonumber(minetest.settings:get("mobs_balrog.view_range")) or 32,
     fire_damage = tonumber(minetest.settings:get("mobs_balrog.fire_damage")) or 10,
@@ -35,8 +36,8 @@ mobs_balrog.settings.whip_tool_capabilities = {
     full_punch_interval = 1,
     max_drop_level = 3,
     damage_groups = {
-        fleshy = math.floor(mobs_balrog.settings.fleshy_damage),
-        fire = math.ceil(mobs_balrog.settings.fire_damage),
+        fleshy = mobs_balrog.settings.fleshy_damage,
+        fire = mobs_balrog.settings.fire_damage,
     },
 }
 
@@ -44,6 +45,6 @@ mobs_balrog.settings.fire_tool_capabilities = {
     full_punch_interval = 1,
     max_drop_level = 3,
     damage_groups = {
-        fire = math.ceil(mobs_balrog.settings.fire_damage),
+        fire = mobs_balrog.settings.fire_damage,
     },
 }

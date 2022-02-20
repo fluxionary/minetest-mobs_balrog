@@ -13,7 +13,7 @@ mobs:register_mob("mobs_balrog:balrog", {
     walk_velocity = 3.5,
     run_velocity = 5.2,
     walk_chance = settings.walk_chance,
-    jump_height = 16,
+    jump_height = settings.jump_height,
     stepheight = 2.2,
     replace_rate = 1,
     replace_what = "air",
