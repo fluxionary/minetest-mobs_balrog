@@ -50,6 +50,7 @@ mobs_balrog = {
     end,
     has = {
         armor = minetest.get_modpath("3d_armor"),
+        armor_monoid = minetest.get_modpath("armor_monoid"),
         shields = minetest.get_modpath("shields"),
         ethereal = minetest.get_modpath("ethereal"),
         nether_mobs = minetest.get_modpath("nether_mobs"),
