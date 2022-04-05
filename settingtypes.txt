@@ -52,3 +52,6 @@ mobs_balrog_damage (Damage Dealt) int 20
 # Usare la ricerca intelligente dei bersagli?
 # 0 = no, 1 = sì, 2 = sì e costruire/distruggere
 mobs_balrog_pathfinding (Path Finding) int 1
+
+# Spawn in the nether, if there is a nether
+mobs_balrog.spawn_in_nether (Spawn in nether?) bool true
