@@ -1,7 +1,7 @@
 local settings = mobs_balrog.settings
 
 mobs:spawn({name = "mobs_balrog:balrog",
-    nodes = {"group:cracky"},
+    nodes = {"group:stone"},
     max_light = settings.max_light,
     min_light = settings.min_light,
     interval = settings.spawn_interval,
