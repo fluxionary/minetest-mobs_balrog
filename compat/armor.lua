@@ -1,3 +1,5 @@
+local has = mobs_balrog.has
+
 armor:register_armor_group("fire", 100)
 
 local function add_fire_protection(name, amount)
