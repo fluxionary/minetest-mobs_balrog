@@ -30,9 +30,8 @@ end
 local function on_use(itemstack, user, pointed_thing)
     if pointed_thing.type == "object" then
         mobs_balrog.api.whip_object(user, pointed_thing.ref, whip_power)
+        itemstack:add_wear(wear_amount)
     end
-
-    itemstack:add_wear(wear_amount)
 
     return itemstack
 end

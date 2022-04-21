@@ -19,6 +19,8 @@
       lumidify (LGPL v2.1)
       fishyWET (LGPL v2.1)
          https://github.com/minetest-LOTR/Lord-of-the-Test/
+   Rewrite:
+       flux (C) 2022 (LGPL v2.1, i guess, i'd prefer AGPL)
 
    This program is free software; you can redistribute it and/or modify
    it under the terms of the Lesser GNU General Public License as published
@@ -38,6 +40,7 @@
 
 ]]--
 local modname = minetest.get_current_modname()
+local get_modpath = minetest.get_modpath
 local modpath = minetest.get_modpath(modname)
 
 mobs_balrog = {
@@ -49,37 +52,40 @@ mobs_balrog = {
         minetest.log(level, ("[%s] %s"):format(modname, messagefmt:format(...)))
     end,
     has = {
-        armor = minetest.get_modpath("3d_armor"),
-        armor_monoid = minetest.get_modpath("armor_monoid"),
-        shields = minetest.get_modpath("shields"),
-        ethereal = minetest.get_modpath("ethereal"),
-        nether_mobs = minetest.get_modpath("nether_mobs"),
-        nether = minetest.get_modpath("nether"),
-        rainbow_ore = minetest.get_modpath("rainbow_ore"),
+        armor = get_modpath("3d_armor"),
+        armor_monoid = get_modpath("armor_monoid"),
+        shields = get_modpath("shields"),
+        ethereal = get_modpath("ethereal"),
+        nether_mobs = get_modpath("nether_mobs"),
+        nether = get_modpath("nether"),
+        pvpplus = get_modpath("pvpplus"),
+        rainbow_ore = get_modpath("rainbow_ore"),
 
-        fire = minetest.get_modpath("fire"),
-        yl_commons = minetest.get_modpath("yl_commons"),
+        fire = get_modpath("fire"),
+        yl_commons = get_modpath("yl_commons"),
 
-        invisibility = minetest.get_modpath("invisibility"),
-    }
+        invisibility = get_modpath("invisibility"),
+    },
+
+	dofile = function(...)
+		dofile(table.concat({modpath, ...}, DIR_DELIM) .. ".lua")
+	end,
 }
 
-dofile(modpath .. "/settings.lua")
-dofile(modpath .. "/api.lua")
-dofile(modpath .. "/balrog.lua")
-dofile(modpath .. "/spawn.lua")
-dofile(modpath .. "/whip.lua")
+mobs_balrog.dofile("settings")
+mobs_balrog.dofile("api", "init")
+mobs_balrog.dofile("entity")
+mobs_balrog.dofile("spawn")
+mobs_balrog.dofile("whip")
 
 if mobs_balrog.settings.flame_node == "mobs_balrog:flame" then
     if mobs_balrog.has.fire then
-        dofile(modpath .. "/flame_node.lua")
+        mobs_balrog.dofile("flame_node")
     else
         error("mobs_balrog needs either fire or yl_commons")
     end
 end
-if mobs_balrog.has.armor then
-    dofile(modpath .. "/compat/armor.lua")
-end
-dofile(modpath .. "/compat/other_mobs.lua")
 
-dofile(modpath .. "/aliases.lua")
+mobs_balrog.dofile("compat", "init")
+
+mobs_balrog.dofile("aliases")

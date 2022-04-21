@@ -1,3 +1,4 @@
+local api = mobs_balrog.api
 local settings = mobs_balrog.settings
 
 mobs:register_mob("mobs_balrog:balrog", {
@@ -46,11 +47,11 @@ mobs:register_mob("mobs_balrog:balrog", {
         attack = "mobs_balrog_stone_death"
     },
     drops = {{
-                 name = "mobs_balrog:balrog_whip",
-                 chance = settings.whip_drop_chance,
-                 min = 1,
-                 max = 1
-             }},
+         name = "mobs_balrog:balrog_whip",
+         chance = settings.whip_drop_chance,
+         min = 1,
+         max = 1
+     }},
     visual = "mesh",
     visual_size = {x = 2, y = 2},
     collisionbox = {-0.8, -2.0, -0.8, 0.8, 2.5, 0.8},
@@ -68,9 +69,9 @@ mobs:register_mob("mobs_balrog:balrog", {
         punch_end = 380,
         punch_speed = 45,
     },
-    custom_attack = mobs_balrog.api.custom_attack,
-    on_die = mobs_balrog.api.on_die,
-    do_custom = mobs_balrog.api.do_custom,
+    custom_attack = function(...) api.custom_attack(...) end,
+    on_die = function(...) api.on_die(...) end,
+    do_custom = function(...) api.do_custom(...) end,
 })
 
 mobs:register_egg("mobs_balrog:balrog",

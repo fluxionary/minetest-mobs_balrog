@@ -22,6 +22,8 @@ mobs_balrog.settings = {
     pathfinding = tonumber(minetest.settings:get("mobs_balrog.pathfinding")) or 2,
     lifetimer = tonumber(minetest.settings:get("mobs_balrog.lifetimer")) or 5 * 60 * 60,
     explodes_on_death = minetest.settings:get_bool("mobs_balrog.explodes_on_death", true),
+    explode_radius = tonumber(minetest.settings:get("mobs_balrog.explode_radius")) or 6,
+    explode_damage_radius = tonumber(minetest.settings:get("mobs_balrog.explode_damage_radius")) or 16,
     whip_drop_chance = tonumber(minetest.settings:get("mobs_balrog.whip_drop_chance")) or 100,
 
     -- whip

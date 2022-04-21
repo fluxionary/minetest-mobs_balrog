@@ -1,10 +1,4 @@
-local has = mobs_balrog.has
-
-armor.registered_groups.fire = 100
-
-if mobs_balrog.has.armor_monoid then
-    armor_monoid.registered_groups.fire = 100
-end
+armor:register_armor_group("fire", 100)
 
 local function add_fire_protection(name, amount)
     local def = minetest.registered_items[name]

@@ -1,3 +1,4 @@
+local has = mobs_balrog.has
 local settings = mobs_balrog.settings
 
 local spawn_nodes = {"nether:rack", "nether:rack_deep", "group:stone"}
@@ -13,12 +14,7 @@ mobs:spawn({name = "mobs_balrog:balrog",
     max_height = settings.max_height,
 })
 
-if (minetest.get_modpath("nether") and
-    settings.spawn_in_nether and
-    nether and
-    nether.DEPTH_FLOOR and
-    nether.DEPTH_CEILING
-    ) then
+if has.nether and settings.spawn_in_nether then
     mobs:spawn({name = "mobs_balrog:balrog",
         nodes = spawn_nodes,
         max_light = settings.max_light,
