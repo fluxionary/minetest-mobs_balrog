@@ -13,7 +13,7 @@ minetest.register_node("mobs_balrog:flame", {
              length = 1
          }
      }},
-    inventory_image = "fire_basic_flame.png",
+    inventory_image = "mobs_balrog_flame.png",
     paramtype = "light",
     light_source = 13,
     walkable = false,

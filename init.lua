@@ -54,17 +54,16 @@ mobs_balrog = {
     has = {
         armor = get_modpath("3d_armor"),
         armor_monoid = get_modpath("armor_monoid"),
-        shields = get_modpath("shields"),
         ethereal = get_modpath("ethereal"),
-        nether_mobs = get_modpath("nether_mobs"),
+        invisibility = get_modpath("invisibility"),
         nether = get_modpath("nether"),
+        nether_mobs = get_modpath("nether_mobs"),
         pvpplus = get_modpath("pvpplus"),
         rainbow_ore = get_modpath("rainbow_ore"),
-
-        fire = get_modpath("fire"),
-        yl_commons = get_modpath("yl_commons"),
-
-        invisibility = get_modpath("invisibility"),
+        shields = get_modpath("shields"),
+        yl_cities = get_modpath("yl_cities"),
+        yl_events = get_modpath("yl_events"),
+        yl_speak_up = get_modpath("yl_speak_up"),
     },
 
 	dofile = function(...)
@@ -79,11 +78,7 @@ mobs_balrog.dofile("spawn")
 mobs_balrog.dofile("whip")
 
 if mobs_balrog.settings.flame_node == "mobs_balrog:flame" then
-    if mobs_balrog.has.fire then
-        mobs_balrog.dofile("flame_node")
-    else
-        error("mobs_balrog needs either fire or yl_commons")
-    end
+    mobs_balrog.dofile("flame_node")
 end
 
 mobs_balrog.dofile("compat", "init")

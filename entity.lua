@@ -76,7 +76,7 @@ mobs:register_mob("mobs_balrog:balrog", {
 
 mobs:register_egg("mobs_balrog:balrog",
     "Balrog",
-    "default_lava.png", -- the texture displayed for the egg in inventory
+    "mobs_balrog_flame.png", -- the texture displayed for the egg in inventory
     1, -- egg image in front of your texture (1 = yes, 0 = no)
     false -- if set to true this stops spawn egg appearing in creative
 )

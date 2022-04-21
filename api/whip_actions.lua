@@ -17,6 +17,13 @@ minetest.register_on_dieplayer(function(player, reason)
     has_died[player:get_player_name()] = true
 end)
 
+local target_blacklist = {
+    ["mobs_balrog:balrog"] = true
+}
+function api.blacklist_target(target)
+    target_blacklist[target] = true
+end
+
 --[[
     identify(object)
 
@@ -50,15 +57,16 @@ local function is_valid_target(source, target)
     if source_id == "nil" or target_id == "nil" or source_id:find("unknown ") or target_id:find("unknown ") then
         return false
     end
+    if target_blacklist[target_id] then
+        return false
+    end
     local target_def = minetest.registered_entities[target_id]
     if target_def then
-        if target_def.physical == false then
-            return false
-        end
-        if target_def.collide_with_objects == false then
-            return false
-        end
-        if target_def.pointable == false then
+        if (
+            target_def.physical == false or
+            target_def.collide_with_objects == false or
+            target_def.pointable == false
+        ) then
             return false
         end
     end
@@ -97,7 +105,7 @@ local function add_particles(target)
         attached = target,
         vertical = false,
         --  ^ vertical: if true faces player using y axis only
-        texture = "fire_basic_flame.png",
+        texture = "mobs_balrog_flame.png",
     })
 end
 

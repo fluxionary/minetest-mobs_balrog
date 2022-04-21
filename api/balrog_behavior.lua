@@ -32,7 +32,7 @@ local function explode(pos)
         name = "Balrog's Blast",
         radius = explode_radius,
         damage_radius = explode_damage_radius,
-        tiles = {""},
+        tiles = {"mobs_balrog_flame.png"},
     })
     mobs_balrog.log("action", "explosion @ %s took %s us",
         minetest.pos_to_string(vector.round(pos)),
@@ -140,7 +140,7 @@ function api.on_die(self, pos)
             maxexptime = 2.0,
             minsize = 10 * 0.66,
             maxsize = 10 * 2,
-            texture = "fire_basic_flame.png",
+            texture = "mobs_balrog_flame.png",
             collisiondetection = true,
         })
         if explodes_on_death then
