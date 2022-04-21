@@ -11,6 +11,11 @@ local flame_node = settings.flame_node
 local fire_damage = settings.fire_damage
 local min_power = 1 / (fire_damage - 1)
 
+-- keep track of player death; resets when hit by a whip
+local has_died = {}
+minetest.register_on_dieplayer(function(player, reason)
+    has_died[player:get_player_name()] = true
+end)
 
 --[[
     identify(object)
@@ -42,7 +47,7 @@ local function is_valid_target(source, target)
     if source_id == target_id then
         return false
     end
-    if source_id:find("unknown ") then
+    if source_id == "nil" or target_id == "nil" or source_id:find("unknown ") or target_id:find("unknown ") then
         return false
     end
     local target_def = minetest.registered_entities[target_id]
@@ -97,9 +102,13 @@ local function add_particles(target)
 end
 
 local function fire_hit(target, source, remaining_hits, starting_power)
-    if not (target and source) then
+    if not is_valid_target(source, target) then
         return
     end
+    if target:is_player() and has_died[target:get_player_name()] then
+        return
+    end
+
     if not starting_power then
         starting_power = 1
     end
@@ -239,6 +248,10 @@ function api.whip_object(source, target, starting_power)
     local pos = target:get_pos()  -- returns nil if dead?
     local hp = target:get_hp()
     if pos and hp > 0 then
+        if target:is_player() then
+            has_died[target:get_player_name()] = false
+        end
+
         minetest.after(1, fire_hit, target, source, whip_fire_time, starting_power)
     end
 end
