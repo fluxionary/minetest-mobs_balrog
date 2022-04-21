@@ -17,9 +17,9 @@ mobs:register_mob("mobs_balrog:balrog", {
     jump_height = settings.jump_height,
     stepheight = 2.2,
     replace_rate = 1,
-    replace_what = "air",
-    replace_with = settings.flame_node,
-    replace_offset = -2,
+    replace_what = {
+        {"air", settings.flame_node, -1},
+    },
     view_range = settings.view_range,
     knock_back = false,
     immune_to = {
@@ -69,9 +69,11 @@ mobs:register_mob("mobs_balrog:balrog", {
         punch_end = 380,
         punch_speed = 45,
     },
-    custom_attack = function(...) api.custom_attack(...) end,
-    on_die = function(...) api.on_die(...) end,
-    do_custom = function(...) api.do_custom(...) end,
+    custom_attack = function(...) return api.custom_attack(...) end,
+    on_die = function(...) return api.on_die(...) end,
+    do_custom = function(...) return api.do_custom(...) end,
+    on_spawn = function(...) return api.on_spawn(...) end,
+    on_blast = function(...) return api.on_blast(...) end,
 })
 
 mobs:register_egg("mobs_balrog:balrog",

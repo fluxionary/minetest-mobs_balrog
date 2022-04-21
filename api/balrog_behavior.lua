@@ -61,7 +61,7 @@ function api.whip_attack(self, dtime)
 
         local distance = vector.distance(own_pos, target_pos)
 
-        if self:line_of_sight(target_pos, own_pos) and distance > 2 * self.reach then
+        if self:line_of_sight(own_pos, target_pos) and distance > 2 * self.reach then
             self.timer = 0
             self:set_animation("punch")
             self:mob_sound(self.sounds.attack)
@@ -76,6 +76,36 @@ function api.whip_attack(self, dtime)
                 1
             )
         end
+    end
+end
+
+function api.destroy_obstructions(self, dtime)
+    self.time_since_obstruct_check = (self.time_since_obstruct_check or 0) + dtime
+
+    if self.state == "attack" and self.attack and self.time_since_obstruct_check > 3 then
+        local cur_pos = self.object:get_pos()
+        local target_pos = self.attack:get_pos()
+        local last_obstruct_pos = self.last_obstruct_pos
+
+        if (
+            last_obstruct_pos and
+            vector.distance(cur_pos, last_obstruct_pos) < 1 and
+            not (
+                self:line_of_sight(cur_pos, vector.add(target_pos, vector.new(0, 1, 0))) and
+                self:line_of_sight(vector.add(cur_pos, vector.new(0, 2, 0), target_pos))
+            )
+        ) then
+            local boom_pos = vector.add(vector.add(
+                cur_pos,
+                vector.new(0, 2, 0)),
+                vector.multiply(vector.direction(cur_pos, target_pos), 2)
+            )
+
+            explode(boom_pos)
+        end
+
+        self.last_obstruct_pos = cur_pos
+        self.time_since_obstruct_check = 0
     end
 end
 
@@ -150,11 +180,12 @@ function api.on_die(self, pos)
 end
 
 function api.do_custom(self, dtime)
-    api.whip_attack(self, dtime)
-
     if has.invisibility then
         api.decloak(self, dtime)
     end
+
+    api.whip_attack(self, dtime)
+    api.destroy_obstructions(self, dtime)
 
     return true
 end
@@ -186,3 +217,13 @@ function api.custom_attack(self, _, target_pos)
 
     end
 end
+
+function api.on_spawn(self)
+    local pos = self.object:get_pos()
+
+end
+
+function api.on_blast(self, damage)
+    return false, false, {}
+end
+

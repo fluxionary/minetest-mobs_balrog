@@ -11,8 +11,8 @@ mobs_balrog.settings = {
     spawn_in_nether = minetest.settings:get_bool("mobs_balrog.spawn_in_nether", true),
 
     -- attributes
-    hp_min = tonumber(minetest.settings:get("mobs_balrog.hp_min")) or 200,
-    hp_max = tonumber(minetest.settings:get("mobs_balrog.hp_max")) or 600,
+    hp_min = tonumber(minetest.settings:get("mobs_balrog.hp_min")) or 800,
+    hp_max = tonumber(minetest.settings:get("mobs_balrog.hp_max")) or 2400,
     jump_height = tonumber(minetest.settings:get("mobs_balrog.jump_height")) or 10,  -- was 16
     walk_chance = tonumber(minetest.settings:get("mobs_balrog.walk_chance")) or 50,
     view_range = tonumber(minetest.settings:get("mobs_balrog.view_range")) or 32,
