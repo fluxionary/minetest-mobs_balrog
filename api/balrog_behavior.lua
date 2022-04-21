@@ -87,12 +87,13 @@ function api.destroy_obstructions(self, dtime)
         local target_pos = self.attack:get_pos()
         local last_obstruct_pos = self.last_obstruct_pos
 
-        if (
+        if (cur_pos and
             last_obstruct_pos and
+            target_pos and
             vector.distance(cur_pos, last_obstruct_pos) < 1 and
             not (
                 self:line_of_sight(cur_pos, vector.add(target_pos, vector.new(0, 1, 0))) and
-                self:line_of_sight(vector.add(cur_pos, vector.new(0, 2, 0), target_pos))
+                self:line_of_sight(vector.add(cur_pos, vector.new(0, 2, 0)), target_pos)
             )
         ) then
             local boom_pos = vector.add(vector.add(
