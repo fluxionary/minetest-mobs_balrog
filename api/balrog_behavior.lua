@@ -38,6 +38,7 @@ local function explode(pos)
         minetest.pos_to_string(vector.round(pos)),
         minetest.get_us_time() - before
     )
+    api.whip_node(pos, "mobs_balrog:balrog")
 end
 
 --[[

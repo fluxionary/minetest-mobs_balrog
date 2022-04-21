@@ -125,6 +125,15 @@ local function fire_hit(target, source, remaining_hits, starting_power)
     end
 end
 
+function api.whip_pull(source, target, dir)
+    if not is_valid_target(source, target) then
+        return
+    end
+    local vel = vector.multiply(dir, -30)  -- TODO make configurable
+    vel.y = math.min(vel.y, 10) -- don't suck "up" too much  -- TODO make configurable
+    target:add_velocity(vel)
+end
+
 function api.whip_air(source, pos, dir, cause, starting_power)
     if not starting_power then
         starting_power = 1
@@ -140,9 +149,7 @@ function api.whip_air(source, pos, dir, cause, starting_power)
                 mobs_balrog.log("action", "%s's air whip hit %s", identify(source), identify(obj))
 
                 -- suck the victim towards the whip holder
-                local vel = vector.multiply(dir, -30)  -- TODO make configurable
-                vel.y = math.min(vel.y, 10) -- don't suck "up" too much  -- TODO make configurable
-                obj:add_velocity(vel)
+                api.whip_pull(source, obj, dir)
                 api.whip_object(source, obj, starting_power)
 
                 hit_obj = true
@@ -171,19 +178,19 @@ function api.whip_node(pos, cause)
     for x = -whip_fire_radius, whip_fire_radius do
         for z = -whip_fire_radius, whip_fire_radius do
             if (x * x + z * z) <= (whip_fire_radius * whip_fire_radius) then
-                for y = 10, -10, -1 do
+                for y = (whip_fire_radius * 2), -(whip_fire_radius * 2), -1 do
                     local new_pos = vector.add(pos, vector.new(x, y, z))
                     if not minetest.is_protected(new_pos, cause) then
                         local posu = vector.subtract(new_pos, vector.new(0, 1, 0))
 
                         local node_name = minetest.get_node(new_pos).name
                         local nodeu_name = minetest.get_node(posu).name
-                        local nodeu_def = minetest.registered_nodes[nodeu_name] or {}
+                        local nodeu_drawtype = (minetest.registered_nodes[nodeu_name] or {}).drawtype
                         local is_solid_under = (
-                            nodeu_def.drawtype ~= "airlike" and
-                            nodeu_def.drawtype ~= "plantlike" and
-                            nodeu_def.drawtype ~= "firelike" and
-                            nodeu_def.drawtype ~= "plantlike_rooted"
+                            nodeu_drawtype ~= "airlike" and
+                            nodeu_drawtype ~= "plantlike" and
+                            nodeu_drawtype ~= "firelike" and
+                            nodeu_drawtype ~= "plantlike_rooted"
                         )
 
                         if node_name == "air" and is_solid_under then
