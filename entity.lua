@@ -36,12 +36,14 @@ mobs:register_mob("mobs_balrog:balrog", {
     reach = 5,
     attack_animals = true,
     attack_monsters = true,
-    group_attack = true,
+    group_attack = false,
     attack_type = "dogfight",
     blood_amount = 0,
     pathfinding = settings.pathfinding,
     makes_footstep_sound = true,
     sounds = {
+        distance = settings.view_range * 2,
+        random = "mobs_balrog_howl",
         war_cry = "mobs_balrog_howl",
         death = "mobs_balrog_howl",
         attack = "mobs_balrog_stone_death"
