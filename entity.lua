@@ -18,7 +18,7 @@ mobs:register_mob("mobs_balrog:balrog", {
     stepheight = 2.2,
     replace_rate = 1,
     replace_what = {
-        {"air", settings.flame_node, -1},
+        {"air", settings.flame_node, -2},
     },
     view_range = settings.view_range,
     knock_back = false,
