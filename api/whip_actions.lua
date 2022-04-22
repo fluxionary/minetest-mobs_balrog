@@ -134,7 +134,7 @@ local function fire_hit(target, source, remaining_hits, starting_power)
     end
 
     add_particles(target)
-    target:punch(source, starting_power, fire_tool_capabilities)
+    target:punch(source.object or source, starting_power, fire_tool_capabilities)
 
     local hp = target:get_hp()
     if target:get_pos() and hp > 0 and remaining_hits > 1 then
@@ -253,7 +253,7 @@ function api.whip_object(source, target, starting_power)
     )
 
     add_particles(target)
-    target:punch(source, power, whip_tool_capabilities)
+    target:punch(source.object or source, power, whip_tool_capabilities)
 
     local pos = target:get_pos()  -- returns nil if dead?
     local hp = target:get_hp()
