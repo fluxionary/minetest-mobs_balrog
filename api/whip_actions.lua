@@ -222,8 +222,10 @@ function api.whip_node(pos, cause)
 end
 
 function api.whip_object(source, target, starting_power)
-    if has.pvpplus and target and not target.is_fake_player and minetest.is_player(target) then
-        if not pvpplus.is_pvp(target:get_player_name()) then
+    if has.pvpplus and source and target and minetest.is_player(source) and minetest.is_player(target) then
+        local source_name = source:get_player_name()
+        local target_name = target:get_player_name()
+        if not (pvpplus.is_pvp(source_name) and pvpplus.is_pvp(target_name)) then
             return false
         end
     end

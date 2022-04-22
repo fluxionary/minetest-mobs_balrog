@@ -195,10 +195,10 @@ function api.custom_attack(self, _, target_pos)
     target_pos = table.copy(target_pos)
     local own_pos = table.copy(self.object:get_pos())
 
-    target_pos.y = target_pos.y + .5
-    own_pos.y = own_pos.y + .5
-
-    if self:line_of_sight(target_pos, own_pos) then
+    if (
+        self:line_of_sight(own_pos, vector.add(target_pos, vector.new(0, 1, 0))) and
+        self:line_of_sight(vector.add(own_pos, vector.new(0, 2, 0)), target_pos)
+    ) then
         self.timer = 0
         self:set_animation("punch")
         -- play attack sound
