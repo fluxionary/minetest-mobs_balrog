@@ -226,7 +226,7 @@ function api.whip_object(source, target, starting_power)
         local source_name = source:get_player_name()
         local target_name = target:get_player_name()
         if not (pvpplus.is_pvp(source_name) and pvpplus.is_pvp(target_name)) then
-            return false
+            return
         end
     end
 

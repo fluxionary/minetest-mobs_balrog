@@ -212,7 +212,7 @@ function api.custom_attack(self, _, target_pos)
         end
 
         api.whip_object(self.object, self.attack)
-
+        self.last_obstruct_pos = nil
     else
         self.state = "walk"
 
