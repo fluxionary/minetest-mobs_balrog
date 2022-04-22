@@ -196,7 +196,7 @@ function api.custom_attack(self, _, target_pos)
     local own_pos = table.copy(self.object:get_pos())
 
     if (
-        self:line_of_sight(own_pos, vector.add(target_pos, vector.new(0, 1, 0))) and
+        self:line_of_sight(own_pos, vector.add(target_pos, vector.new(0, 1, 0))) or
         self:line_of_sight(vector.add(own_pos, vector.new(0, 2, 0)), target_pos)
     ) then
         self.timer = 0
