@@ -145,7 +145,7 @@ if has.invisibility then
                     elseif is_invisible and is_target then
                         local str = reveal_phrases[math.random(1, #reveal_phrases)]
                         minetest.chat_send_player(pname, str)
-                        invisibility[pname] = nil
+                        invisible(obj, false)
                     end
                 end
             end
