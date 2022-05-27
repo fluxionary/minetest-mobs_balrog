@@ -37,7 +37,7 @@ local function identify(object)
     end
     object = object.object or object
 
-    if object.is_player and object:is_player() then
+    if minetest.is_player(object) then
         return object:get_player_name() or "unknown player"
     elseif object.get_luaentity and object:get_luaentity() and object:get_luaentity().name then
         return object:get_luaentity().name
@@ -72,7 +72,7 @@ local function is_valid_target(source, target)
     end
 
     if has.pvpplus then
-        if source:is_player() and target:is_player() then
+        if minetest.is_player(source) and minetest.is_player(target) then
             return pvpplus.is_pvp(source:get_player_name()) and pvpplus.is_pvp(target:get_player_name())
         end
     end
@@ -86,6 +86,12 @@ local function puts_out_fire(pos)
         minetest.get_item_group(node_name, "water") > 0 or
         minetest.get_item_group(node_name, "cools_lava") > 0
     )
+end
+
+local function is_in_water(target)
+    local target_pos = (target.object or target):get_pos()
+    local target_in_node = minetest.get_node(target_pos)
+    return minetest.get_item_group(target_in_node.name, "water") > 0
 end
 
 local function add_particles(target)
@@ -109,11 +115,11 @@ local function add_particles(target)
     })
 end
 
-local function fire_hit(target, source, remaining_hits, starting_power)
+local function fire_tick(target, source, remaining_hits, starting_power)
     if not is_valid_target(source, target) then
         return
     end
-    if target:is_player() and has_died[target:get_player_name()] then
+    if minetest.is_player(target) and has_died[target:get_player_name()] then
         return
     end
 
@@ -138,12 +144,12 @@ local function fire_hit(target, source, remaining_hits, starting_power)
 
     local hp = target:get_hp()
     if target:get_pos() and hp > 0 and remaining_hits > 1 then
-        minetest.after(1, fire_hit, target, source, remaining_hits - 1)
+        minetest.after(1, fire_tick, target, source, remaining_hits - 1)
     end
 end
 
 function api.whip_pull(source, target, dir)
-    if not is_valid_target(source, target) then
+    if (not is_valid_target(source, target)) or is_in_water(target) then
         return
     end
     local vel = vector.multiply(dir, -30)  -- TODO make configurable
@@ -258,10 +264,10 @@ function api.whip_object(source, target, starting_power)
     local pos = target:get_pos()  -- returns nil if dead?
     local hp = target:get_hp()
     if pos and hp > 0 then
-        if target:is_player() then
+        if minetest.is_player(target) then
             has_died[target:get_player_name()] = false
         end
 
-        minetest.after(1, fire_hit, target, source, whip_fire_time, starting_power)
+        minetest.after(1, fire_tick, target, source, whip_fire_time, starting_power)
     end
 end
