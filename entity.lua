@@ -76,6 +76,9 @@ mobs:register_mob("mobs_balrog:balrog", {
     do_custom = function(...) return api.do_custom(...) end,
     on_spawn = function(...) return api.on_spawn(...) end,
     on_blast = function(...) return api.on_blast(...) end,
+    after_activate = function(self, staticdata, def, dtime)
+        api.heal(self, dtime)
+    end,
 })
 
 mobs:register_egg("mobs_balrog:balrog",
