@@ -145,7 +145,7 @@ if has.invisibility then
                     elseif is_invisible and is_target then
                         local str = reveal_phrases[math.random(1, #reveal_phrases)]
                         minetest.chat_send_player(pname, str)
-                        invisible(obj, false)
+                        invisibility[pname] = nil
                     end
                 end
             end
@@ -180,10 +180,25 @@ function api.on_die(self, pos)
     end)
 end
 
+local heal_rate = 5
+function api.heal(self, dtime)
+    if self.state == "attack" or self.health == self.hp_max then
+        self.time_since_heal = 0
+    else
+        self.time_since_heal = (self.time_since_heal or 0) + dtime
+        if self.time_since_heal > heal_rate then
+            self.health = math.min(self.hp_max, self.health + math.round(self.time_since_heal / heal_rate))
+            self.time_since_heal = 0
+        end
+    end
+end
+
 function api.do_custom(self, dtime)
     if has.invisibility then
         api.decloak(self, dtime)
     end
+
+    api.heal(self, dtime)
 
     api.whip_attack(self, dtime)
     api.destroy_obstructions(self, dtime)
