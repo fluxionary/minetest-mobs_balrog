@@ -42,11 +42,11 @@ mobs:register_mob("mobs_balrog:balrog", {
     pathfinding = settings.pathfinding,
     makes_footstep_sound = true,
     sounds = {
-        distance = settings.view_range * 2,
-        random = "mobs_balrog_howl",
-        war_cry = "mobs_balrog_howl",
-        death = "mobs_balrog_howl",
-        attack = "mobs_balrog_stone_death"
+        distance = settings.view_range * 8,
+        random = "mobs_balrog_random",
+        war_cry = "mobs_balrog_war_cry",
+        death = "mobs_balrog_death",
+        attack = "mobs_balrog_attack"
     },
     drops = {{
          name = "mobs_balrog:balrog_whip",

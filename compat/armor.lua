@@ -5,7 +5,8 @@ armor:register_armor_group("fire", 100)
 local function add_fire_protection(name, amount)
     local def = minetest.registered_items[name]
     if not def then
-        error(("no def for %s"):format(name))
+        mobs_balrog.log("warning", "no def for %s", name)
+        return
     end
     if not def.armor_groups then
         error(("no armor_groups for %s"):format(name))
