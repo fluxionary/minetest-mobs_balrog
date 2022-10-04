@@ -32,6 +32,9 @@ mobs_balrog.settings = {
     whip_fire_radius = tonumber(minetest.settings:get("mobs_balrog.whip_fire_radius")) or 5,
     whip_fire_time = tonumber(minetest.settings:get("mobs_balrog.whip_fire_time")) or 5,
     flame_node = minetest.settings:get("mobs_balrog.flame_node") or "mobs_balrog:flame",
+
+    -- debug
+    debug = minetest.settings:get_bool("mobs_balrog.debug", false),
 }
 
 mobs_balrog.settings.whip_tool_capabilities = {

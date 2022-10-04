@@ -74,7 +74,6 @@ mobs:register_mob("mobs_balrog:balrog", {
     custom_attack = function(...) return api.custom_attack(...) end,
     on_die = function(...) return api.on_die(...) end,
     do_custom = function(...) return api.do_custom(...) end,
-    on_spawn = function(...) return api.on_spawn(...) end,
     on_blast = function(...) return api.on_blast(...) end,
     after_activate = function(self, staticdata, def, dtime)
         api.heal(self, dtime)

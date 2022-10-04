@@ -28,16 +28,19 @@ local reveal_phrases = {
 
 local function explode(pos)
     local before = minetest.get_us_time()
+
     tnt.boom(pos, {
         name = "Balrog's Blast",
         radius = explode_radius,
         damage_radius = explode_damage_radius,
         tiles = {"mobs_balrog_flame.png"},
     })
+
     mobs_balrog.log("action", "explosion @ %s took %s us",
         minetest.pos_to_string(vector.round(pos)),
         minetest.get_us_time() - before
     )
+
     api.whip_node(pos, "mobs_balrog:balrog")
 end
 
@@ -156,34 +159,33 @@ end
 function api.on_die(self, pos)
     self.object:remove()
 
-    minetest.after(0.0, function()
-        -- This has been taken from ../tnt/init.lua @243
-        minetest.add_particlespawner({
-            amount = 128,
-            time = 0.1,
-            minpos = vector.subtract(pos, 10 / 2),
-            maxpos = vector.add(pos, 10 / 2),
-            minvel = {x = -3, y = 0, z = -3},
-            maxvel = {x = 3, y = 5, z = 3},
-            minacc = {x = 0, y = -10, z = 0},
-            maxacc = {x = 0, y = -10, z = 0},
-            minexptime = 0.8,
-            maxexptime = 2.0,
-            minsize = 10 * 0.66,
-            maxsize = 10 * 2,
-            texture = "mobs_balrog_flame.png",
-            collisiondetection = true,
-        })
-        if explodes_on_death then
-            minetest.after(0, explode, pos)
-        end
-    end)
+    minetest.add_particlespawner({
+        amount = 128,
+        time = 0.1,
+        minpos = vector.subtract(pos, 10 / 2),
+        maxpos = vector.add(pos, 10 / 2),
+        minvel = {x = -3, y = 0, z = -3},
+        maxvel = {x = 3, y = 5, z = 3},
+        minacc = {x = 0, y = -10, z = 0},
+        maxacc = {x = 0, y = -10, z = 0},
+        minexptime = 1.8,
+        maxexptime = 4.0,
+        minsize = 10 * 0.66,
+        maxsize = 10 * 2,
+        texture = "mobs_balrog_flame.png",
+        collisiondetection = true,
+    })
+
+    if explodes_on_death then
+        minetest.after(0, explode, pos)
+    end
 end
 
 local heal_rate = 5
 function api.heal(self, dtime)
     if self.state == "attack" or self.health == self.hp_max then
         self.time_since_heal = 0
+
     else
         self.time_since_heal = (self.time_since_heal or 0) + dtime
         if self.time_since_heal > heal_rate then
@@ -228,18 +230,12 @@ function api.custom_attack(self, _, target_pos)
 
         api.whip_object(self.object, self.attack)
         self.last_obstruct_pos = nil
+
     else
         self.state = "walk"
-
     end
-end
-
-function api.on_spawn(self)
-    local pos = self.object:get_pos()
-
 end
 
 function api.on_blast(self, damage)
     return false, false, {}
 end
-

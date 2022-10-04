@@ -43,3 +43,7 @@ end
 mobs_balrog.dofile("compat", "init")
 
 mobs_balrog.dofile("aliases")
+
+if mobs_balrog.settings.debug then
+    mobs_balrog.dofile("debug")
+end
