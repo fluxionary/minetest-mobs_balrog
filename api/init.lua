@@ -1,5 +1,3 @@
-
-
 mobs_balrog.api = {}
 
 mobs_balrog.dofile("api", "whip_actions")

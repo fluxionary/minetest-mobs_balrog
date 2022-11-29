@@ -654,5 +654,10 @@ stds.mobs_balrog = {
 		"armor_monoid",
 		"default",
 		"fmod",
+		"invisibility",
+		"mobs",
+		"nether",
+		"pvpplus",
+		"tnt",
 	},
 }

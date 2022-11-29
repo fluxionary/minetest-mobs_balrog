@@ -1,19 +1,19 @@
 local has = mobs_balrog.has
 
 if has.armor then
-    mobs_balrog.dofile("compat", "armor")
+	mobs_balrog.dofile("compat", "armor")
 end
 
 if has.yl_cities then
-    mobs_balrog.dofile("compat", "yl_cities")
+	mobs_balrog.dofile("compat", "yl_cities")
 end
 
 if has.yl_events then
-    mobs_balrog.dofile("compat", "yl_events")
+	mobs_balrog.dofile("compat", "yl_events")
 end
 
 if has.yl_speak_up then
-    mobs_balrog.dofile("compat", "yl_speak_up")
+	mobs_balrog.dofile("compat", "yl_speak_up")
 end
 
 mobs_balrog.dofile("compat", "other_mobs")
