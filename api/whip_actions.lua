@@ -36,13 +36,14 @@ local function identify(object)
 		return "nil"
 	end
 	object = object.object or object
+	local ent = object.get_luaentity and object:get_luaentity()
 
 	if minetest.is_player(object) then
 		return object:get_player_name() or "unknown player"
 	elseif object.name then
 		return object.name
-	elseif object.get_luaentity and object:get_luaentity() and object:get_luaentity().name then
-		return object:get_luaentity().name
+	elseif ent and ent.name then
+		return ent.name
 	elseif object.get_entity_name then
 		return object:get_entity_name() or ("unknown %s"):format(type(object))
 	else
