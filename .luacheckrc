@@ -648,13 +648,14 @@ stds.minetest = {
 stds.mobs_balrog = {
 	globals = {
 		"mobs_balrog",
+		"invisibility",
 	},
 	read_globals = {
 		"armor",
 		"armor_monoid",
 		"default",
 		"fmod",
-		"invisibility",
+		"invisible",
 		"mobs",
 		"nether",
 		"pvpplus",

@@ -1,30 +1,9 @@
 local api = mobs_balrog.api
-local has = mobs_balrog.has
 local settings = mobs_balrog.settings
 
 local explodes_on_death = settings.explodes_on_death
 local explode_radius = settings.explode_radius
 local explode_damage_radius = settings.explode_damage_radius
-
--- TODO: configurable?
-local sense_phrases = {
-	"Fee fie foe fum, I smell the blood of an adventurer...",
-	"I sense thee...",
-	"I thought I felt *something*",
-	"I sense thee, although thou hide...",
-	"Well now, who is this, who creeps along in the shadows?",
-}
-
--- TODO: configurable?
-local reveal_phrases = {
-	"Become visible!",
-	"Be made visible!",
-	"Be seen, be dead!",
-	"Be seen!",
-	"You are exposed!",
-	"There they are, attack!",
-	"Show Yourself!",
-}
 
 local function explode(pos)
 	local before = minetest.get_us_time()
@@ -109,50 +88,6 @@ function api.destroy_obstructions(self, dtime)
 	end
 end
 
-if has.invisibility then
-	--[[
-        remove invisibility from invisible players.
-
-        -- TODO: make this part of an external API? it should just be part of invisibility, honestly
-    ]]
-	function api.decloak(self, dtime)
-		self.player_invisibility_target = self.player_invisibility_target or ""
-		self.invisibility_sensor = (self.invisibility_sensor or 0) + dtime
-
-		if self.invisibility_sensor > 3 then
-			self.invisibility_sensor = 0
-
-			local p = self.object and self.object:get_pos()
-			if not p then
-				-- we don't actually exist, give up
-				return
-			end
-
-			-- TODO: radius configurable
-			for _, obj in pairs(minetest.get_objects_inside_radius(p, 10)) do
-				if obj:is_player() then
-					local pname = obj:get_player_name()
-					local is_staff = minetest.check_player_privs(pname, { staff = true })
-					local is_invisible = invisibility[pname]
-					local is_target = self.player_invisibility_target == pname
-
-					if is_invisible and not is_target and not is_staff then
-						local str = sense_phrases[math.random(1, #sense_phrases)]
-						minetest.chat_send_player(pname, str)
-						self.player_invisibility_target = pname
-					elseif is_invisible and is_target then
-						local str = reveal_phrases[math.random(1, #reveal_phrases)]
-						minetest.chat_send_player(pname, str)
-						-- luacheck: push globals invisibility
-						invisibility[pname] = nil
-						-- luacheck: pop
-					end
-				end
-			end
-		end
-	end
-end
-
 function api.on_die(self, pos)
 	self.object:remove()
 
@@ -191,9 +126,14 @@ function api.heal(self, dtime)
 	end
 end
 
+api.on_do_custom = {}
+function api.register_on_do_custom(callback)
+	api.on_do_custom[#api.on_do_custom + 1] = callback
+end
+
 function api.do_custom(self, dtime)
-	if has.invisibility then
-		api.decloak(self, dtime)
+	for _, callback in ipairs(api.on_do_custom) do
+		callback(self, dtime)
 	end
 
 	api.heal(self, dtime)

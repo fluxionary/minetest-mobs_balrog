@@ -4,6 +4,10 @@ if has.armor then
 	mobs_balrog.dofile("compat", "armor")
 end
 
+if has.invisibility then
+	mobs_balrog.dofile("compat", "invisibility")
+end
+
 if has.yl_cities then
 	mobs_balrog.dofile("compat", "yl_cities")
 end
