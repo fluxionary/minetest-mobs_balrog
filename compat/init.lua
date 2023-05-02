@@ -1,6 +1,6 @@
 local has = mobs_balrog.has
 
-if has.armor then
+if has["3d_armor"] then
 	mobs_balrog.dofile("compat", "armor")
 end
 

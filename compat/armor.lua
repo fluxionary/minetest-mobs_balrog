@@ -17,22 +17,25 @@ local function add_fire_protection(name, amount)
 	mobs_balrog.log("action", "adding fire protection to %s", name)
 end
 
-add_fire_protection("3d_armor:boots_admin", 200)
-add_fire_protection("3d_armor:chestplate_admin", 200)
-add_fire_protection("3d_armor:helmet_admin", 200)
-add_fire_protection("3d_armor:leggings_admin", 200)
-if has.shields then
-	-- errors out, because it has no armor groups defined :\
-	--add_fire_protection("shields:shield_admin", 200)
-	minetest.override_item("shields:shield_admin", {
-		armor_groups = {
-			fleshy = 1000,
-			fire = 200,
-		},
-	})
+if has.armor_admin then
+	add_fire_protection("3d_armor:boots_admin", 200)
+	add_fire_protection("3d_armor:chestplate_admin", 200)
+	add_fire_protection("3d_armor:helmet_admin", 200)
+	add_fire_protection("3d_armor:leggings_admin", 200)
+
+	if has.shields then
+		-- errors out, because it has no armor groups defined :\
+		--add_fire_protection("shields:shield_admin", 200)
+		minetest.override_item("shields:shield_admin", {
+			armor_groups = {
+				fleshy = 1000,
+				fire = 200,
+			},
+		})
+	end
 end
 
-if has.ethereal then
+if has.armor_crystal then
 	add_fire_protection("3d_armor:boots_crystal", 10)
 	add_fire_protection("3d_armor:chestplate_crystal", 10)
 	add_fire_protection("3d_armor:helmet_crystal", 10)
@@ -42,7 +45,7 @@ if has.ethereal then
 	end
 end
 
-if has.nether then
+if has.armor_nether then
 	add_fire_protection("3d_armor:boots_nether", 15)
 	add_fire_protection("3d_armor:chestplate_nether", 15)
 	add_fire_protection("3d_armor:helmet_nether", 15)

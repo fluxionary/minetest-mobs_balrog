@@ -40,6 +40,6 @@ minetest.register_node("mobs_balrog:flame", {
 	end,
 })
 
-if mobs_balrog.has.armor then
+if mobs_balrog.has["3d_armor"] then
 	table.insert(armor.fire_nodes, { "mobs_balrog:flame", 4, 4 })
 end
