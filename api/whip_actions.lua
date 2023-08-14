@@ -35,6 +35,10 @@ local function identify(object)
 	if not object then
 		return "nil"
 	end
+	if type(object) == "string" then
+		return object
+	end
+
 	object = object.object or object
 	local ent = object.get_luaentity and object:get_luaentity()
 
@@ -158,6 +162,7 @@ function api.whip_pull(source, target, dir)
 end
 
 function api.whip_air(source, pos, dir, cause, starting_power)
+	local source_id = identify(source)
 	if not starting_power then
 		starting_power = 1
 	end
@@ -169,7 +174,7 @@ function api.whip_air(source, pos, dir, cause, starting_power)
 
 		for _, obj in ipairs(minetest.get_objects_in_area(lb, ub)) do
 			if is_valid_target(source, obj) then
-				mobs_balrog.log("action", "%s's air whip hit %s", identify(source), identify(obj))
+				mobs_balrog.log("action", "%s's air whip hit %s", source_id, identify(obj))
 
 				-- suck the victim towards the whip holder
 				api.whip_pull(source, obj, dir)
@@ -188,21 +193,31 @@ function api.whip_air(source, pos, dir, cause, starting_power)
 		local node = minetest.get_node(new_pos)
 		local node_name = node.name
 		if node_name == "air" then
-			minetest.set_node(new_pos, { name = flame_node })
+			minetest.item_place_node(ItemStack(flame_node), source, { type = "node", under = new_pos, above = new_pos })
+			if minetest.get_node(new_pos).name ~= flame_node then
+				break
+			end
 		elseif node_name ~= flame_node then
 			break
 		end
 	end
 end
 
-function api.whip_node(pos, cause)
+function api.whip_node(cause, pos)
+	if vector.check(cause) then
+		cause, pos = pos, cause
+	end
+	local cause_id = identify(cause)
+	if type(cause) == "string" then
+		cause = nil
+	end
 	for x = -whip_fire_radius, whip_fire_radius do
 		for z = -whip_fire_radius, whip_fire_radius do
 			if (x * x + z * z) <= (whip_fire_radius * whip_fire_radius) then
 				for y = (whip_fire_radius * 2), -(whip_fire_radius * 2), -1 do
-					local new_pos = vector.add(pos, vector.new(x, y, z))
-					if not minetest.is_protected(new_pos, cause) then
-						local posu = vector.subtract(new_pos, vector.new(0, 1, 0))
+					local new_pos = pos:offset(pos, x, y, z)
+					if not minetest.is_protected(new_pos, cause_id) then
+						local posu = new_pos:offset(new_pos, 0, -1, 0)
 
 						local node_name = minetest.get_node(new_pos).name
 						local nodeu_name = minetest.get_node(posu).name
@@ -215,8 +230,14 @@ function api.whip_node(pos, cause)
 						)
 
 						if node_name == "air" and is_solid_under then
-							minetest.set_node(new_pos, { name = flame_node })
-							break
+							minetest.item_place_node(
+								ItemStack(flame_node),
+								cause,
+								{ type = "node", under = new_pos, above = new_pos }
+							)
+							if minetest.get_node(new_pos).name == flame_node then
+								break
+							end
 						end
 					end
 				end

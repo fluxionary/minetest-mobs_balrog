@@ -16,7 +16,7 @@ local function on_rightclick(itemstack, placer, pointed_thing)
 			whip_power
 		)
 	elseif pointed_thing.type == "node" then
-		api.whip_node(pointed_thing.above, placer:get_player_name())
+		api.whip_node(placer, pointed_thing.above)
 	elseif pointed_thing.type == "object" then
 		local target = pointed_thing.ref
 		api.whip_pull(placer, target, placer:get_look_dir())

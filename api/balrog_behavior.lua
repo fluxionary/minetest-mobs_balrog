@@ -5,7 +5,7 @@ local explodes_on_death = settings.explodes_on_death
 local explode_radius = settings.explode_radius
 local explode_damage_radius = settings.explode_damage_radius
 
-local function explode(pos)
+local function explode(obj, pos)
 	local before = minetest.get_us_time()
 
 	tnt.boom(pos, {
@@ -22,7 +22,7 @@ local function explode(pos)
 		minetest.get_us_time() - before
 	)
 
-	api.whip_node(pos, "mobs_balrog:balrog")
+	api.whip_node(obj, pos)
 end
 
 --[[
@@ -80,7 +80,7 @@ function api.destroy_obstructions(self, dtime)
 				vector.multiply(vector.direction(cur_pos, target_pos), 2)
 			)
 
-			explode(boom_pos)
+			explode(self.object, boom_pos)
 		end
 
 		self.last_obstruct_pos = cur_pos
@@ -109,7 +109,7 @@ function api.on_die(self, pos)
 	})
 
 	if explodes_on_death then
-		minetest.after(0, explode, pos)
+		minetest.after(0, explode, "mobs_balrog:balrog", pos)
 	end
 end
 
