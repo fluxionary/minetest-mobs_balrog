@@ -215,9 +215,9 @@ function api.whip_node(cause, pos)
 		for z = -whip_fire_radius, whip_fire_radius do
 			if (x * x + z * z) <= (whip_fire_radius * whip_fire_radius) then
 				for y = (whip_fire_radius * 2), -(whip_fire_radius * 2), -1 do
-					local new_pos = pos:offset(pos, x, y, z)
+					local new_pos = pos:offset(x, y, z)
 					if not minetest.is_protected(new_pos, cause_id) then
-						local posu = new_pos:offset(new_pos, 0, -1, 0)
+						local posu = new_pos:offset(0, -1, 0)
 
 						local node_name = minetest.get_node(new_pos).name
 						local nodeu_name = minetest.get_node(posu).name
