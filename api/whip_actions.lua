@@ -67,15 +67,14 @@ local function is_valid_target(source, target)
 	if target_blacklist[target_id] then
 		return false
 	end
-	local target_def = minetest.registered_entities[target_id]
-	if target_def then
-		if
-			target_def.physical == false
-			or target_def.collide_with_objects == false
-			or target_def.pointable == false
-		then
-			return false
-		end
+	local target_def = minetest.registered_entities[target_id] or {}
+	local initial_properties = target_def.initial_properties or {}
+	local physical = futil.coalesce(initial_properties.physical, target_def.physical, false)
+	local collide_with_objects =
+		futil.coalesce(initial_properties.collide_with_objects, target_def.collide_with_objects, true)
+	local pointable = futil.coalesce(initial_properties.pointable, target_def.pointable, true)
+	if not (physical and collide_with_objects and pointable) then
+		return false
 	end
 
 	if has.pvpplus then

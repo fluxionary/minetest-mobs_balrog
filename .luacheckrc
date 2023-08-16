@@ -655,6 +655,7 @@ stds.mobs_balrog = {
 		"armor_monoid",
 		"default",
 		"fmod",
+		"futil",
 		"invisible",
 		"mobs",
 		"nether",
