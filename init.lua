@@ -1,3 +1,5 @@
+futil.check_version({ year = 2023, month = 11, day = 1 }) -- is_player
+
 mobs_balrog = fmod.create()
 
 mobs_balrog.settings.whip_tool_capabilities = {

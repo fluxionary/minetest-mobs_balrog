@@ -42,13 +42,13 @@ local function identify(object)
 	object = object.object or object
 	local ent = object.get_luaentity and object:get_luaentity()
 
-	if minetest.is_player(object) then
+	if futil.is_player(object) then
 		return object:get_player_name() or "unknown player"
-	elseif object.name then
+	elseif object and object.name then
 		return object.name
 	elseif ent and ent.name then
 		return ent.name
-	elseif object.get_entity_name then
+	elseif object and object.get_entity_name then
 		return object:get_entity_name() or ("unknown %s"):format(type(object))
 	else
 		return ("unknown %s"):format(type(object))
@@ -78,7 +78,7 @@ local function is_valid_target(source, target)
 	end
 
 	if has.pvpplus then
-		if minetest.is_player(source) and minetest.is_player(target) then
+		if futil.is_player(source) and futil.is_player(target) then
 			return pvpplus.is_pvp(source:get_player_name()) and pvpplus.is_pvp(target:get_player_name())
 		end
 	end
@@ -122,7 +122,7 @@ local function fire_tick(target, source, remaining_hits, starting_power)
 	if not is_valid_target(source, target) then
 		return
 	end
-	if minetest.is_player(target) and has_died[target:get_player_name()] then
+	if futil.is_player(target) and has_died[target:get_player_name()] then
 		return
 	end
 
@@ -246,7 +246,7 @@ function api.whip_node(cause, pos)
 end
 
 function api.whip_object(source, target, starting_power)
-	if has.pvpplus and source and target and minetest.is_player(source) and minetest.is_player(target) then
+	if has.pvpplus and source and target and futil.is_player(source) and futil.is_player(target) then
 		local source_name = source:get_player_name()
 		local target_name = target:get_player_name()
 		if not (pvpplus.is_pvp(source_name) and pvpplus.is_pvp(target_name)) then
@@ -280,7 +280,7 @@ function api.whip_object(source, target, starting_power)
 	local pos = target:get_pos() -- returns nil if dead?
 	local hp = target:get_hp()
 	if pos and hp > 0 then
-		if minetest.is_player(target) then
+		if futil.is_player(target) then
 			has_died[target:get_player_name()] = false
 		end
 
