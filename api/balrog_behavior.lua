@@ -115,12 +115,28 @@ end
 
 local heal_rate = 5
 function api.heal(self, dtime)
-	if self.state == "attack" or self.health == self.hp_max then
+	-- https://codeberg.org/tenplus1/mobs_redo/commit/812f18430c343c9ac70b83276faa3aabf5a25116
+	local hp_max = self.hp_max
+
+	if not hp_max then
+		if self.object and self.object.get_properties then
+			local props = self.object:get_properties()
+			if props then
+				hp_max = props.hp_max
+			end
+		end
+	end
+
+	if not hp_max then
+		hp_max = settings.hp_max
+	end
+
+	if self.state == "attack" or self.health == hp_max then
 		self.time_since_heal = 0
 	else
 		self.time_since_heal = (self.time_since_heal or 0) + dtime
 		if self.time_since_heal > heal_rate then
-			self.health = math.min(self.hp_max, self.health + math.round(self.time_since_heal / heal_rate))
+			self.health = math.min(hp_max, self.health + math.round(self.time_since_heal / heal_rate))
 			self.time_since_heal = 0
 		end
 	end
