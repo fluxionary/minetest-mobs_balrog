@@ -37,10 +37,11 @@ mobs_balrog.api.register_on_do_custom(function(self, dtime)
 			return
 		end
 
-		-- TODO: radius configurable
-		for _, obj in pairs(minetest.get_objects_inside_radius(p, 10)) do
-			if obj:is_player() then
-				local pname = obj:get_player_name()
+		local players = minetest.get_connected_players()
+		for i = 1, #players do
+			local player = players[i]
+			if p:distance(player:get_pos()) <= mobs_balrog.settings.invisibility_radius then
+				local pname = player:get_player_name()
 				local is_staff = minetest.check_player_privs(pname, { staff = true })
 				local is_invisible = invisibility[pname]
 				local is_target = self.player_invisibility_target == pname
@@ -53,7 +54,7 @@ mobs_balrog.api.register_on_do_custom(function(self, dtime)
 					local str = reveal_phrases[math.random(1, #reveal_phrases)]
 					minetest.chat_send_player(pname, str)
 					if minetest.global_exists("invisible") then
-						invisible(obj, false)
+						invisible(player, false)
 					else
 						invisibility[pname] = nil
 					end

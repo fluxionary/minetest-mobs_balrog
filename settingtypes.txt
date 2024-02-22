@@ -96,3 +96,6 @@ mobs_balrog.flame_node (Whip fire node) string mobs_balrog:flame
 
 # set to true to enable some additional debugging output
 mobs_balrog.debug (balrog debugging) bool false
+
+# if players are invisible and within this radius, the balrog will reveal them
+mobs_balrog.invisibility_radius (invisibility unmask radius) float 10 0
