@@ -4,6 +4,9 @@
 	-- TODO: make this part of an external API? it should just be part of invisibility, honestly
 ]]
 
+-- Function was renamed https://codeberg.org/tenplus1/invisibility/issues/1
+local invisible = invisible or invisibility.invisible
+
 -- TODO: configurable?
 local sense_phrases = {
 	"Fee fie foe fum, I smell the blood of an adventurer...",
