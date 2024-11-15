@@ -4,6 +4,17 @@
 	-- TODO: make this part of an external API? it should just be part of invisibility, honestly
 ]]
 
+if invisibility and 
+	not (type(invisibility.is_visible) == "function") and
+	not (type(invisibility.invisible) == "function")
+then
+	mobs_balrog.log(
+		"warning",
+		"Please upgrade to latest version of invisibility"
+	)
+	return false
+end
+
 -- TODO: configurable?
 local sense_phrases = {
 	"Fee fie foe fum, I smell the blood of an adventurer...",
@@ -43,7 +54,7 @@ mobs_balrog.api.register_on_do_custom(function(self, dtime)
 			if p:distance(player:get_pos()) <= mobs_balrog.settings.invisibility_radius then
 				local pname = player:get_player_name()
 				local is_staff = minetest.check_player_privs(pname, { staff = true })
-				local is_invisible = invisibility[pname]
+				local is_invisible = not invisibility.is_visible(pname)
 				local is_target = self.player_invisibility_target == pname
 
 				if is_invisible and not is_target and not is_staff then
@@ -53,11 +64,7 @@ mobs_balrog.api.register_on_do_custom(function(self, dtime)
 				elseif is_invisible and is_target then
 					local str = reveal_phrases[math.random(1, #reveal_phrases)]
 					minetest.chat_send_player(pname, str)
-					if minetest.global_exists("invisible") then
-						invisible(player, false)
-					else
-						invisibility[pname] = nil
-					end
+					invisibility.invisible(player, false)
 				end
 			end
 		end
